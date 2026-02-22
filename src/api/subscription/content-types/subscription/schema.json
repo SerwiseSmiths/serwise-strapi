@@ -68,10 +68,11 @@
       "type": "text",
       "required": false
     },
-    "device_types": {
+    "device_type": {
       "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::device-type.device-type"
+      "relation": "manyToOne",
+      "target": "api::device-type.device-type",
+      "inversedBy": "subscriptions"
     },
     "services": {
       "type": "relation",

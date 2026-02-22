@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-const API_URL = 'http://localhost:1337/api';
-const API_KEY = '6a28feea84d4aca1ab5c397e60a98e10754931cfb8d1e520df94454cc2bc5a9cc5759d2362e0592af5bcca0e6d3f3fb36e48932e22e853bd5d89e767f08b15540c121f340d22e5f0fa1aee95795a92ee8a74b4fb9abfd60cb8f418d3e3ed8fd3ee8f2a2042feaabb1f6cb45af0a6d37408c5103babefd020c974b0b536bc3c7f';
+const API_URL = 'https://serwise-strapi.onrender.com/api';
+const API_KEY = 'f4eccc44c4419a4e4836ee925ffd94300330212b5f40bd398d42a4c6f9d3ca35a136b98b252a4b3e41ba2080d57abd874873543eacc76f2858d3ab2712c115389aec6b9d67f063671cbe548d3798429e7243bb8f579cd71992e2fce6166698aff2fa5a7e9f6baf73b5636de7535e4595e0141440d274a6bbda7eaf63eec49b30';
 const MAX_RETRIES = 60;
 const RETRY_DELAY = 2000;
 
