@@ -17,6 +17,7 @@ The Part API manages all parts, repairs, and services available in the system. P
 | `quantity` | Integer | ✗ | Available quantity (default: 0) |
 | `description` | Text | ✗ | Part description |
 | `status` | Enum | ✓ | Status: `ACTIVE`, `DRAFT`, `DISCONTINUED` (default: `DRAFT`) |
+| `device_type` | Relation | ✗ | Many-to-one relation to Device Type |
 | `publishedAt` | DateTime | Auto | Publication timestamp |
 | `createdAt` | DateTime | Auto | Creation timestamp |
 | `updatedAt` | DateTime | Auto | Last update timestamp |
@@ -79,7 +80,7 @@ GET /api/parts
 #### Query Parameters
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `populate` | String | Relations to populate (currently none) |
+| `populate` | String | Relations to populate (e.g., `device_type`) |
 | `filters[type][$eq]` | String | Filter by type: `Parts`, `Repair`, `Service` |
 | `filters[category][$eq]` | String | Filter by category |
 | `filters[status][$eq]` | String | Filter by status: `ACTIVE`, `DRAFT`, `DISCONTINUED` |
@@ -163,7 +164,8 @@ Authorization: Bearer YOUR_API_TOKEN
     "price": 25.00,
     "quantity": 10,
     "description": "A new water filter part",
-    "status": "ACTIVE"
+    "status": "ACTIVE",
+    "device_type": 1
   }
 }
 ```
@@ -214,6 +216,10 @@ Authorization: Bearer YOUR_API_TOKEN
 ```
 
 ## Common Queries
+### Get Parts for Device Type
+```
+GET /api/parts?filters[device_type][id][$eq]=1
+```
 
 ### Get All Active Parts
 ```http

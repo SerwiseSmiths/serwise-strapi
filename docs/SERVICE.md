@@ -300,5 +300,5 @@ Revenue = Net Revenue After Expense
 ## Notes
 - All decimal fields must be ≥ 0
 - Services support draft and publish functionality
-- A service must have a device_type to be fully functional
+- A service must have a device_type to be fully functional (one‑to‑many from Device Type)
 - Services can be linked to multiple subscriptions via many-to-many relation

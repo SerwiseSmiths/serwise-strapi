@@ -167,7 +167,7 @@ Content-Type: application/json
     "duration": "monthly_3",
     "cost": 150.00,
     "price_of_subscription": 29.99,
-    "device_types": [1],
+    "device_type": 1,
     "services": [1]
   }
 }
