@@ -20,7 +20,7 @@ The Subscription API manages subscription plans available in the system. Subscri
 | `profit_non_subscribed` | Decimal | ✗ | Profit from non-subscribed users (≥ 0) |
 | `price_of_subscription` | Decimal | ✓ | Subscription price (≥ 0) |
 | `description` | Text | ✗ | Subscription description |
-| `device_types` | Relation | ✗ | Many-to-many relation to Device Types |
+| `device_type` | Relation | ✗ | Many-to-one relation to Device Type |
 | `services` | Relation | ✗ | Many-to-many relation to Services |
 | `publishedAt` | DateTime | Auto | Publication timestamp |
 | `createdAt` | DateTime | Auto | Creation timestamp |
@@ -133,7 +133,7 @@ GET /api/subscriptions/:id
       "cost": 150.00,
       "sales_subscribed": 500.00,
       "price_of_subscription": 29.99,
-      "device_types": { "data": [ ... ] },
+      "device_type": { "data": { ... } },
       "services": { "data": [ ... ] },
       "createdAt": "2025-01-15T10:00:00.000Z"
     }
@@ -157,7 +157,7 @@ Content-Type: application/json
     "cost": 250.00,
     "price_of_subscription": 49.99,
     "description": "Premium plan with 6 months validity and extra features",
-    "device_types": [1, 2],
+    "device_type": 1,
     "services": [1, 2, 3]
   }
 }
@@ -305,7 +305,7 @@ query GetSubscriptions(
         profit_non_subscribed
         price_of_subscription
         description
-        device_types {
+        device_type {
           data {
             id
             attributes {
@@ -345,7 +345,7 @@ query GetSubscriptionById($id: ID!) {
         cost
         price_of_subscription
         description
-        device_types { data { id } }
+        device_type { data { id } }
         services { data { id } }
       }
     }
@@ -382,6 +382,11 @@ GET /api/subscriptions?filters[duration][$eq]=monthly_3
 GET /api/subscriptions?filters[plan_type][$eq]=UV Plan&filters[duration][$eq]=monthly_6
 ```
 
+### Get Subscriptions for a Specific Device Type
+```
+GET /api/subscriptions?filters[device_type][id][$eq]=1
+```
+
 ### Get Affordable Subscriptions (Under $50)
 ```
 GET /api/subscriptions?filters[price_of_subscription][$lt]=50&sort=price_of_subscription:asc
@@ -410,5 +415,6 @@ Non-Subscribed Margin = (Sales Non-Subscribed - Cost) / Sales Non-Subscribed × 
 - Subscriptions support draft and publish functionality
 - Duration field determines subscription validity period
 - Plan type helps categorize different subscription tiers
-- A subscription can include multiple device types and services
+- A subscription is associated with exactly one device type (one-to-many relationship from device type)
+- A subscription can include multiple services
 - Financial metrics help track subscription performance

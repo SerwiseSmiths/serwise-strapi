@@ -452,13 +452,14 @@ export interface ApiDeviceTypeDeviceType extends Struct.CollectionTypeSchema {
       'api::device-type.device-type'
     > &
       Schema.Attribute.Private;
+    parts: Schema.Attribute.Relation<'oneToMany', 'api::part.part'>;
     publishedAt: Schema.Attribute.DateTime;
     services: Schema.Attribute.Relation<'oneToMany', 'api::service.service'>;
     status: Schema.Attribute.Enumeration<['ACTIVE', 'DRAFT', 'EXPERIMENTAL']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'DRAFT'>;
     subscriptions: Schema.Attribute.Relation<
-      'manyToMany',
+      'oneToMany',
       'api::subscription.subscription'
     >;
     type: Schema.Attribute.String &
@@ -530,6 +531,10 @@ export interface ApiPartPart extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
+    device_type: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::device-type.device-type'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::part.part'> &
       Schema.Attribute.Private;
@@ -642,8 +647,8 @@ export interface ApiSubscriptionSubscription
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    device_types: Schema.Attribute.Relation<
-      'manyToMany',
+    device_type: Schema.Attribute.Relation<
+      'manyToOne',
       'api::device-type.device-type'
     >;
     duration: Schema.Attribute.Enumeration<

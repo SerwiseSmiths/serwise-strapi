@@ -14,7 +14,8 @@
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry",
     "seed": "tsx scripts/seed-data.ts",
-    "seed:parts": "tsx scripts/seed-parts.ts"
+    "seed:parts": "tsx scripts/seed-parts.ts",
+    "sync:pages:render": "tsx scripts/sync-pages-to-render.ts"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.33.4",

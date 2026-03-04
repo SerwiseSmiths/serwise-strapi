@@ -60,6 +60,12 @@
       ],
       "required": true,
       "default": "DRAFT"
+    },
+    "device_type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::device-type.device-type",
+      "inversedBy": "parts"
     }
   }
 }
