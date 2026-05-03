@@ -75,7 +75,7 @@
       "type": "text",
       "required": false
     },
-    "device_types": {
+    "device_type": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::device-type.device-type"

@@ -487,11 +487,12 @@ export interface ApiDeviceTypeDeviceType extends Struct.CollectionTypeSchema {
       'api::device-type.device-type'
     > &
       Schema.Attribute.Private;
+    parts: Schema.Attribute.Relation<'oneToMany', 'api::part.part'>;
     publishedAt: Schema.Attribute.DateTime;
     services: Schema.Attribute.Relation<'oneToMany', 'api::service.service'>;
     state: Schema.Attribute.Enumeration<['ACTIVE', 'EXPERIMENTAL', 'DRAFT']>;
     subscriptions: Schema.Attribute.Relation<
-      'manyToMany',
+      'oneToMany',
       'api::subscription.subscription'
     >;
     thumbnail: Schema.Attribute.Media<'images'>;
@@ -564,6 +565,10 @@ export interface ApiPartPart extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
+    device_type: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::device-type.device-type'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::part.part'> &
       Schema.Attribute.Private;
@@ -718,8 +723,8 @@ export interface ApiSubscriptionSubscription
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    device_types: Schema.Attribute.Relation<
-      'manyToMany',
+    device_type: Schema.Attribute.Relation<
+      'manyToOne',
       'api::device-type.device-type'
     >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;

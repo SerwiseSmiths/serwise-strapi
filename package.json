@@ -16,7 +16,8 @@
     "seed": "tsx scripts/seed-data.ts",
     "seed:parts": "tsx scripts/seed-parts.ts",
     "migrate-to-prod": "tsx scripts/migrate-to-prod.ts",
-    "migrate-to-local": "tsx scripts/migrate-to-local.ts"
+    "migrate-to-local": "tsx scripts/migrate-to-local.ts",
+    "sync:pages:render": "tsx scripts/sync-pages-to-render.ts"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.33.4",

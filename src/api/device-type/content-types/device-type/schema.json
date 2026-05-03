@@ -50,6 +50,12 @@
       "target": "api::service.service",
       "mappedBy": "device_type"
     },
+    "parts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::part.part",
+      "mappedBy": "device_type"
+    },
     "subscriptions": {
       "type": "relation",
       "relation": "manyToMany",
