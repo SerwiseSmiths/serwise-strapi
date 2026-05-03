@@ -1,6 +1,6 @@
-import path from 'path';
+const path = require('path');
 
-export default ({ env }) => ({
+module.exports = ({ env }) => ({
   upload: {
     config: {
       provider: path.join(process.cwd(), 'src/upload-provider'),

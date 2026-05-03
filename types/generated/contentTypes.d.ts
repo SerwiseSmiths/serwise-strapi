@@ -430,6 +430,40 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAppVersionAppVersion extends Struct.SingleTypeSchema {
+  collectionName: 'app_version';
+  info: {
+    displayName: 'App Version';
+    pluralName: 'app-versions';
+    singularName: 'app-version';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    is_forced: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::app-version.app-version'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    radix_apk: Schema.Attribute.Media<'files'>;
+    radix_min_required_version: Schema.Attribute.String;
+    radix_version: Schema.Attribute.String;
+    serwise_apk: Schema.Attribute.Media<'files'>;
+    serwise_min_required_version: Schema.Attribute.String;
+    serwise_version: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiDeviceTypeDeviceType extends Struct.CollectionTypeSchema {
   collectionName: 'device_types';
   info: {
@@ -445,6 +479,7 @@ export interface ApiDeviceTypeDeviceType extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    icon: Schema.Attribute.Media<'images'>;
     image: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -455,13 +490,12 @@ export interface ApiDeviceTypeDeviceType extends Struct.CollectionTypeSchema {
     parts: Schema.Attribute.Relation<'oneToMany', 'api::part.part'>;
     publishedAt: Schema.Attribute.DateTime;
     services: Schema.Attribute.Relation<'oneToMany', 'api::service.service'>;
-    status: Schema.Attribute.Enumeration<['ACTIVE', 'DRAFT', 'EXPERIMENTAL']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'DRAFT'>;
+    state: Schema.Attribute.Enumeration<['ACTIVE', 'EXPERIMENTAL', 'DRAFT']>;
     subscriptions: Schema.Attribute.Relation<
       'oneToMany',
       'api::subscription.subscription'
     >;
+    thumbnail: Schema.Attribute.Media<'images'>;
     type: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
@@ -546,14 +580,16 @@ export interface ApiPartPart extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<0>;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    status: Schema.Attribute.Enumeration<['ACTIVE', 'DRAFT', 'DISCONTINUED']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'DRAFT'>;
     type: Schema.Attribute.Enumeration<['Parts', 'Repair', 'Service']> &
       Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    visibility: Schema.Attribute.Enumeration<
+      ['ACTIVE', 'DRAFT', 'DISCONTINUED']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'DRAFT'>;
   };
 }
 
@@ -623,6 +659,46 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiSignUpBonusSignUpBonus extends Struct.SingleTypeSchema {
+  collectionName: 'sign_up_bonus';
+  info: {
+    displayName: 'Sign Up Bonus';
+    pluralName: 'sign-up-bonuses';
+    singularName: 'sign-up-bonus';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    bonusAmount: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    bonusImage: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::sign-up-bonus.sign-up-bonus'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiSubscriptionSubscription
   extends Struct.CollectionTypeSchema {
   collectionName: 'subscriptions';
@@ -651,22 +727,16 @@ export interface ApiSubscriptionSubscription
       'manyToOne',
       'api::device-type.device-type'
     >;
-    duration: Schema.Attribute.Enumeration<
-      ['monthly_3', 'monthly_4', 'monthly_6', 'one_time']
-    > &
-      Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::subscription.subscription'
     > &
       Schema.Attribute.Private;
+    lockInPeriod: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    maxDiscount: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    plan_type: Schema.Attribute.Enumeration<
-      ['Normal Plan', 'UV Plan', 'UF Plan']
-    > &
-      Schema.Attribute.Required;
-    price_of_subscription: Schema.Attribute.Decimal &
+    non_sub_profit: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
         {
@@ -674,39 +744,49 @@ export interface ApiSubscriptionSubscription
         },
         number
       >;
-    profit_non_subscribed: Schema.Attribute.Decimal &
+    non_sub_sales: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
         {
           min: 0;
         },
         number
       >;
-    profit_subscribed: Schema.Attribute.Decimal &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 0;
-        },
-        number
-      >;
+    plan_type: Schema.Attribute.Enumeration<['Basic', 'Standard', 'Addon']> &
+      Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    sales_non_subscribed: Schema.Attribute.Decimal &
+    serviceMapping: Schema.Attribute.Component<
+      'subscription.service-mapping',
+      true
+    >;
+    sub_profit: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
         {
           min: 0;
         },
         number
       >;
-    sales_subscribed: Schema.Attribute.Decimal &
+    sub_sales: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
         {
           min: 0;
         },
         number
       >;
-    services: Schema.Attribute.Relation<'manyToMany', 'api::service.service'>;
+    totalServices: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    validityDuration: Schema.Attribute.Integer & Schema.Attribute.Required;
   };
 }
 
@@ -1220,10 +1300,12 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::app-version.app-version': ApiAppVersionAppVersion;
       'api::device-type.device-type': ApiDeviceTypeDeviceType;
       'api::page.page': ApiPagePage;
       'api::part.part': ApiPartPart;
       'api::service.service': ApiServiceService;
+      'api::sign-up-bonus.sign-up-bonus': ApiSignUpBonusSignUpBonus;
       'api::subscription.subscription': ApiSubscriptionSubscription;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

@@ -24,15 +24,21 @@
         "images"
       ]
     },
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "ACTIVE",
-        "DRAFT",
-        "EXPERIMENTAL"
-      ],
-      "required": true,
-      "default": "DRAFT"
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "action_link": {
       "type": "string",
@@ -52,9 +58,16 @@
     },
     "subscriptions": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::subscription.subscription",
-      "mappedBy": "device_type"
+      "relation": "manyToMany",
+      "target": "api::subscription.subscription"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "ACTIVE",
+        "EXPERIMENTAL",
+        "DRAFT"
+      ]
     }
   }
 }
